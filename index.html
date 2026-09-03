@@ -1,0 +1,1715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Timro Jiwan | Your Digital Health Identity</title>
+  <style>
+    /* ==========================================
+       1. GLOBAL THEME & DESIGN SYSTEM
+       ========================================== */
+    :root {
+      --primary: #0284c7;
+      --primary-dark: #0369a1;
+      --primary-light: #e0f2fe;
+      --secondary: #0d9488;
+      --secondary-light: #ccfbf1;
+      --accent-red: #ef4444;
+      --accent-red-light: #ffeeeb;
+      --accent-amber: #f59e0b;
+      --accent-green: #10b981;
+      --bg-main: #f8fafc;
+      --bg-card: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --text-white: #ffffff;
+      --border-color: #e2e8f0;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -1px rgba(0,0,0,0.04);
+      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 18px;
+      --radius-full: 9999px;
+      --transition: all 0.25s ease-in-out;
+      --font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    button, input, select, textarea {
+      font-family: inherit;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* ==========================================
+       2. REUSABLE UI COMPONENTS & UTILITIES
+       ========================================== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 20px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+    .btn-primary {
+      background-color: var(--primary);
+      color: var(--text-white);
+    }
+    .btn-primary:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+    .btn-secondary {
+      background-color: var(--bg-card);
+      border-color: var(--border-color);
+      color: var(--text-main);
+    }
+    .btn-secondary:hover {
+      background-color: var(--primary-light);
+      border-color: var(--primary);
+      color: var(--primary-dark);
+    }
+    .btn-danger {
+      background-color: var(--accent-red);
+      color: var(--text-white);
+    }
+    .btn-danger:hover {
+      background-color: #dc2626;
+    }
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 0.85rem;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .badge-active, .badge-success { background: #dcfce7; color: #15803d; }
+    .badge-warning { background: #fef3c7; color: #b45309; }
+    .badge-danger { background: #fee2e2; color: #b91c1c; }
+    .badge-info { background: var(--primary-light); color: var(--primary-dark); }
+
+    .card {
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      padding: 20px;
+      transition: var(--transition);
+    }
+    .card:hover {
+      box-shadow: var(--shadow-md);
+    }
+
+    /* Modal Styling */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      padding: 16px;
+    }
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal-card {
+      background: var(--bg-card);
+      width: 100%;
+      max-width: 550px;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .modal-header {
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-body {
+      padding: 24px;
+      overflow-y: auto;
+    }
+    .modal-footer {
+      padding: 16px 24px;
+      border-top: 1px solid var(--border-color);
+      background: var(--bg-main);
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+
+    /* Form Fields */
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--text-main);
+    }
+    .form-control {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      font-size: 0.95rem;
+      transition: var(--transition);
+    }
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+    }
+
+    /* QR Code Visualization Placeholder */
+    .qr-placeholder {
+      width: 180px;
+      height: 180px;
+      margin: 16px auto;
+      border: 8px solid white;
+      box-shadow: var(--shadow-md);
+      background: repeating-linear-gradient(
+        45deg,
+        #0f172a,
+        #0f172a 10px,
+        #ffffff 10px,
+        #ffffff 20px
+      );
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .qr-placeholder::after {
+      content: "HEALTH-ID";
+      background: var(--primary);
+      color: white;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 4px 8px;
+      border-radius: 4px;
+      letter-spacing: 1px;
+    }
+
+    /* Demo Disclaimer Banner */
+    .demo-disclaimer {
+      background: var(--accent-amber);
+      color: #78350f;
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 6px 16px;
+      text-align: center;
+      letter-spacing: 0.3px;
+    }
+
+    /* ==========================================
+       3. PUBLIC LANDING PAGE
+       ========================================== */
+    .landing-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 5%;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border-color);
+    }
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 1.35rem;
+      color: var(--primary-dark);
+    }
+    .brand-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      box-shadow: 0 4px 10px rgba(13, 148, 136, 0.3);
+    }
+    .brand-tagline {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 500;
+      display: block;
+    }
+
+    .hero-section {
+      padding: 80px 5% 60px;
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+    .hero-text h1 {
+      font-size: 3rem;
+      line-height: 1.15;
+      color: var(--text-main);
+      margin-bottom: 20px;
+      font-weight: 800;
+    }
+    .hero-text p {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      margin-bottom: 30px;
+    }
+    .hero-cta {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .hero-card-preview {
+      background: linear-gradient(135deg, #0284c7 0%, #0f172a 100%);
+      color: white;
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-card-preview::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 100%;
+      height: 100%;
+      background: rgba(255,255,255,0.05);
+      transform: rotate(45deg);
+    }
+
+    .features-section, .how-it-works-section {
+      padding: 60px 5%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .section-title {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 40px;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+    .feature-card {
+      background: var(--bg-card);
+      padding: 28px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+    }
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-sm);
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      margin-bottom: 16px;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+    .step-card {
+      background: var(--bg-card);
+      padding: 24px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+      position: relative;
+    }
+    .step-num {
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: var(--primary-light);
+      position: absolute;
+      top: 10px; right: 16px;
+    }
+
+    .landing-cta-final {
+      text-align: center;
+      background: linear-gradient(135deg, var(--primary-light), var(--secondary-light));
+      padding: 60px 20px;
+      border-radius: var(--radius-lg);
+      margin: 40px 5%;
+    }
+
+    .landing-footer {
+      background: #0f172a;
+      color: #94a3b8;
+      padding: 40px 5% 20px;
+      font-size: 0.9rem;
+    }
+    .footer-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 30px;
+    }
+    .footer-disclaimer {
+      border-top: 1px solid #334155;
+      padding-top: 20px;
+      font-size: 0.8rem;
+      text-align: center;
+      color: #64748b;
+    }
+
+    /* ==========================================
+       4. AUTHENTICATION (LOGIN / REGISTER)
+       ========================================== */
+    .auth-container {
+      max-width: 460px;
+      margin: 60px auto;
+      padding: 0 20px;
+    }
+
+    /* ==========================================
+       5. AUTHENTICATED DASHBOARD LAYOUT
+       ========================================== */
+    .app-layout {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 260px;
+      background: var(--bg-card);
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0; bottom: 0; left: 0;
+      z-index: 100;
+      transition: transform 0.3s ease;
+    }
+    .sidebar-header {
+      padding: 20px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .sidebar-menu {
+      padding: 16px 0;
+      flex: 1;
+      overflow-y: auto;
+    }
+    .menu-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 24px;
+      color: var(--text-muted);
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      border-left: 4px solid transparent;
+    }
+    .menu-item:hover, .menu-item.active {
+      color: var(--primary-dark);
+      background: var(--primary-light);
+      border-left-color: var(--primary);
+    }
+
+    .main-wrapper {
+      flex: 1;
+      margin-left: 260px;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+    .top-nav {
+      height: 70px;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      position: sticky;
+      top: 0;
+      z-index: 90;
+    }
+    .search-bar {
+      width: 320px;
+      position: relative;
+    }
+    .search-bar input {
+      width: 100%;
+      padding: 8px 14px 8px 36px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border-color);
+      background: var(--bg-main);
+      font-size: 0.88rem;
+    }
+    .search-bar::before {
+      content: "🔍";
+      position: absolute;
+      left: 12px; top: 8px;
+      font-size: 0.8rem;
+      opacity: 0.5;
+    }
+
+    .user-nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .lang-toggle {
+      background: var(--bg-main);
+      border: 1px solid var(--border-color);
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      font-size: 0.8rem;
+      cursor: pointer;
+      font-weight: 700;
+    }
+    .user-profile-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+    .user-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-full);
+      background: var(--primary-dark);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+
+    .dashboard-content {
+      padding: 28px;
+      flex: 1;
+      max-width: 1400px;
+    }
+
+    /* Mobile Bottom Navigation */
+    .mobile-bottom-nav {
+      display: none;
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      height: 60px;
+      background: var(--bg-card);
+      border-top: 1px solid var(--border-color);
+      z-index: 200;
+      justify-content: space-around;
+      align-items: center;
+    }
+    .mobile-nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .mobile-nav-item.active {
+      color: var(--primary);
+    }
+    .mobile-nav-item span {
+      font-size: 1.2rem;
+    }
+
+    /* Dashboard Widgets & Health ID Header Card */
+    .health-id-banner {
+      background: linear-gradient(135deg, #0284c7 0%, #0d9488 100%);
+      color: white;
+      border-radius: var(--radius-md);
+      padding: 24px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow-md);
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .health-id-code {
+      font-family: monospace;
+      font-size: 1.6rem;
+      letter-spacing: 2px;
+      font-weight: 800;
+      background: rgba(255,255,255,0.15);
+      padding: 4px 12px;
+      border-radius: var(--radius-sm);
+      display: inline-block;
+      margin-top: 6px;
+    }
+
+    .quick-actions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .quick-action-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 14px 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition);
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+    .quick-action-btn:hover {
+      border-color: var(--primary);
+      background: var(--primary-light);
+      transform: translateY(-2px);
+    }
+    .quick-action-icon {
+      font-size: 1.4rem;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .summary-metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .metric-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 16px;
+    }
+    .metric-val {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      margin-top: 4px;
+    }
+
+    /* Timeline Component */
+    .timeline {
+      position: relative;
+      padding-left: 24px;
+      margin-top: 16px;
+    }
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 7px; top: 4px; bottom: 4px;
+      width: 2px;
+      background: var(--border-color);
+    }
+    .timeline-item {
+      position: relative;
+      margin-bottom: 24px;
+    }
+    .timeline-dot {
+      position: absolute;
+      left: -24px; top: 4px;
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      background: var(--primary);
+      border: 3px solid var(--bg-card);
+    }
+    .timeline-content {
+      background: var(--bg-card);
+      padding: 14px 18px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+    }
+
+    /* Dynamic Data Tables */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      background: var(--bg-card);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+    }
+    .data-table th, .data-table td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+      font-size: 0.9rem;
+    }
+    .data-table th {
+      background: var(--bg-main);
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    /* Emergency Mode Overrides */
+    body.emergency-active {
+      background: #450a0a !important;
+    }
+    body.emergency-active .app-layout {
+      filter: grayscale(10%);
+    }
+    .emergency-card-view {
+      background: #7f1d1d;
+      color: white;
+      border: 2px solid #ef4444;
+      padding: 24px;
+      border-radius: var(--radius-lg);
+      max-width: 600px;
+      margin: 20px auto;
+      box-shadow: 0 0 30px rgba(239,68,68,0.4);
+    }
+
+    /* ==========================================
+       6. RESPONSIVE BREAKPOINTS
+       ========================================== */
+    @media (max-width: 900px) {
+      .hero-section {
+        grid-template-columns: 1fr;
+        text-align: center;
+        padding-top: 40px;
+      }
+      .hero-cta {
+        justify-content: center;
+      }
+      .sidebar {
+        transform: translateX(-100%);
+      }
+      .sidebar.open {
+        transform: translateX(0);
+      }
+      .main-wrapper {
+        margin-left: 0;
+      }
+      .mobile-bottom-nav {
+        display: flex;
+      }
+      .dashboard-content {
+        padding-bottom: 80px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="demo-disclaimer" id="demoBanner">
+    <span>⚠️ PROTOTYPE DEMO ONLY: Timro Jiwan is an interactive digital mockup. Data is stored locally in your browser.</span>
+  </div>
+
+  <div id="landingView">
+    <nav class="landing-nav">
+      <div class="brand-logo">
+        <div class="brand-logo-icon">TJ</div>
+        <div>
+          Timro Jiwan
+          <span class="brand-tagline" data-i18n="tagline">Your health. Your identity. Your control.</span>
+        </div>
+      </div>
+      <div style="display:flex; gap:12px; align-items:center;">
+        <button class="lang-toggle" onclick="toggleLanguage()" id="langToggleBtn">NEP</button>
+        <button class="btn btn-secondary btn-sm" onclick="navigateTo('login')">Login</button>
+        <button class="btn btn-primary btn-sm" onclick="navigateTo('register')">Get Health ID</button>
+      </div>
+    </nav>
+
+    <header class="hero-section">
+      <div class="hero-text">
+        <h1 data-i18n="heroTitle">Your medical history should follow you.</h1>
+        <p data-i18n="heroSub">Timro Jiwan gives you one secure Health ID to manage and share your medical records wherever you receive healthcare across Nepal.</p>
+        <div class="hero-cta">
+          <button class="btn btn-primary" onclick="navigateTo('register')" data-i18n="getStarted">Get Your Health ID</button>
+          <button class="btn btn-secondary" onclick="scrollToSection('howItWorks')" data-i18n="seeHow">See How It Works</button>
+        </div>
+      </div>
+      <div>
+        <div class="hero-card-preview">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span>HEALTH IDENTITY CARD</span>
+            <span class="badge badge-active">Active</span>
+          </div>
+          <div style="margin:24px 0;">
+            <div style="font-size:0.85rem; opacity:0.8;">PATIENT NAME</div>
+            <div style="font-size:1.4rem; font-weight:700;">Prabhat Bhatta</div>
+            <div class="health-id-code" style="font-size:1.2rem; margin-top:8px;">TJ-NP-2847-5912</div>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; font-size:0.85rem;">
+            <div>Blood Type: <strong>O+</strong></div>
+            <div>Emergency: <strong>Penicillin Allergy</strong></div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section class="features-section">
+      <h2 class="section-title">Built for Patient Ownership</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🪪</div>
+          <h3>One Health ID</h3>
+          <p style="color:var(--text-muted); font-size:0.9rem; margin-top:8px;">One unified digital identity for all your healthcare interactions across hospitals and clinics.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📂</div>
+          <h3>Your Records</h3>
+          <p style="color:var(--text-muted); font-size:0.9rem; margin-top:8px;">Keep prescriptions, lab reports, vaccinations, and medical histories securely organized in one place.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔐</div>
+          <h3>Your Control</h3>
+          <p style="color:var(--text-muted); font-size:0.9rem; margin-top:8px;">Decide exactly which healthcare providers can view your health details, and revoke access anytime.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="how-it-works-section" id="howItWorks">
+      <h2 class="section-title">How Timro Jiwan Works</h2>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-num">01</div>
+          <h4 style="margin-top:20px;">Create Health ID</h4>
+          <p style="font-size:0.85rem; color:var(--text-muted); margin-top:6px;">Register in less than a minute to claim your lifetime digital health number.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">02</div>
+          <h4 style="margin-top:20px;">Store Records</h4>
+          <p style="font-size:0.85rem; color:var(--text-muted); margin-top:6px;">Upload reports or receive records directly from connected diagnostic labs.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">03</div>
+          <h4 style="margin-top:20px;">Share Access</h4>
+          <p style="font-size:0.85rem; color:var(--text-muted); margin-top:6px;">Generate time-limited access QR codes or PINs for your treating doctor.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">04</div>
+          <h4 style="margin-top:20px;">Stay Protected</h4>
+          <p style="font-size:0.85rem; color:var(--text-muted); margin-top:6px;">Track access logs and instantly revoke permissions whenever you wish.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="landing-cta-final">
+      <h2>Your health. Your identity. Your control.</h2>
+      <p style="margin:12px 0 24px; color:var(--text-muted);">Start building your unified digital health identity with Timro Jiwan today.</p>
+      <button class="btn btn-primary" onclick="navigateTo('register')">Create Your Health ID</button>
+    </div>
+
+    <footer class="landing-footer">
+      <div class="footer-grid">
+        <div>
+          <div class="brand-logo" style="color:white; margin-bottom:12px;">
+            <div class="brand-logo-icon">TJ</div> Timro Jiwan
+          </div>
+          <p>Connecting healthcare data securely for every citizen in Nepal.</p>
+        </div>
+        <div>
+          <h5 style="color:white; margin-bottom:12px;">Navigation</h5>
+          <p><a href="#" onclick="navigateTo('login')" style="color:inherit;">Login</a></p>
+          <p><a href="#" onclick="navigateTo('register')" style="color:inherit;">Register</a></p>
+        </div>
+        <div>
+          <h5 style="color:white; margin-bottom:12px;">Contact</h5>
+          <p>Kathmandu, Nepal</p>
+          <p>support@timrojiwan.np.demo</p>
+        </div>
+      </div>
+      <div class="footer-disclaimer">
+        Timro Jiwan is a conceptual prototype. It does not provide medical diagnosis or treatment and is not currently connected to real hospitals, government health databases, or insurance providers.
+      </div>
+    </footer>
+  </div>
+
+  <div id="authView" class="hidden">
+    <div class="landing-nav">
+      <div class="brand-logo" onclick="navigateTo('landing')" style="cursor:pointer;">
+        <div class="brand-logo-icon">TJ</div> Timro Jiwan
+      </div>
+    </div>
+    
+    <div id="loginFormContainer" class="auth-container">
+      <div class="card" style="padding:32px;">
+        <h2 style="margin-bottom:8px;">Welcome Back</h2>
+        <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:24px;">Enter your credentials to access your Health ID.</p>
+        <form onsubmit="handleLogin(event)">
+          <div class="form-group">
+            <label>Health ID or Phone</label>
+            <input type="text" class="form-control" id="loginId" value="TJ-NP-2847-5912" required />
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" class="form-control" value="demo1234" required />
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%; margin-top:12px;">Log In</button>
+        </form>
+        <p style="text-align:center; margin-top:20px; font-size:0.85rem; color:var(--text-muted);">
+          Don't have a Health ID? <a href="#" onclick="switchAuthMode('register')">Register now</a>
+        </p>
+      </div>
+    </div>
+
+    <div id="registerFormContainer" class="auth-container hidden">
+      <div class="card" style="padding:32px;">
+        <h2 style="margin-bottom:8px;">Get Your Health ID</h2>
+        <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:20px;">Register to generate your lifetime digital health profile.</p>
+        <form onsubmit="handleRegister(event)">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" class="form-control" id="regName" placeholder="e.g. Prabhat Bhatta" required />
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+            <div class="form-group">
+              <label>Date of Birth</label>
+              <input type="date" class="form-control" id="regDob" required />
+            </div>
+            <div class="form-group">
+              <label>Gender</label>
+              <select class="form-control" id="regGender">
+                <option>Male</option>
+                <option>Female</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input type="tel" class="form-control" id="regPhone" placeholder="98XXXXXXXX" required />
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" class="form-control" id="regEmail" placeholder="name@example.com" required />
+          </div>
+          <div class="form-group">
+            <label style="display:flex; gap:8px; align-items:center; font-weight:normal; font-size:0.85rem;">
+              <input type="checkbox" required /> I agree to Timro Jiwan's Terms of Service and Privacy Policy.
+            </label>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;">Create Account & Generate ID</button>
+        </form>
+        <p style="text-align:center; margin-top:20px; font-size:0.85rem; color:var(--text-muted);">
+          Already have a Health ID? <a href="#" onclick="switchAuthMode('login')">Log In</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div id="dashboardView" class="app-layout hidden">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-logo">
+          <div class="brand-logo-icon">TJ</div> Timro Jiwan
+        </div>
+      </div>
+      <nav class="sidebar-menu">
+        <div class="menu-item active" onclick="loadTab('home')"><span>🏠</span> Overview</div>
+        <div class="menu-item" onclick="loadTab('records')"><span>📂</span> Medical Records</div>
+        <div class="menu-item" onclick="loadTab('prescriptions')"><span>💊</span> Prescriptions</div>
+        <div class="menu-item" onclick="loadTab('medications')"><span>🕒</span> Active Medications</div>
+        <div class="menu-item" onclick="loadTab('vaccinations')"><span>💉</span> Vaccinations</div>
+        <div class="menu-item" onclick="loadTab('hospitals')"><span>🏥</span> Provider Visits</div>
+        <div class="menu-item" onclick="loadTab('emergency')"><span>🚨</span> Emergency Profile</div>
+        <div class="menu-item" onclick="loadTab('share')"><span>🔗</span> Share Records</div>
+        <div class="menu-item" onclick="loadTab('permissions')"><span>🛡️</span> Access Permissions</div>
+        <div class="menu-item" onclick="loadTab('family')"><span>👨‍👩‍👧</span> Family Health</div>
+        <div class="menu-item" onclick="loadTab('ai')"><span>🤖</span> AI Health Summary</div>
+        <div class="menu-item" onclick="loadTab('settings')"><span>⚙️</span> Settings</div>
+      </nav>
+      <div style="padding:16px; border-top:1px solid var(--border-color);">
+        <button class="btn btn-secondary btn-sm" style="width:100%;" onclick="handleLogout()">Log Out</button>
+      </div>
+    </aside>
+
+    <main class="main-wrapper">
+      <header class="top-nav">
+        <div class="search-bar">
+          <input type="text" placeholder="Search records, medications, doctors..." onkeyup="handleGlobalSearch(this.value)" />
+        </div>
+        <div class="user-nav-actions">
+          <button class="lang-toggle" onclick="toggleLanguage()">NEP</button>
+          <div class="user-profile-badge" onclick="loadTab('settings')">
+            <div class="user-avatar" id="navAvatar">PB</div>
+            <div style="font-size:0.85rem; font-weight:600;" id="navUserName">Prabhat Bhatta</div>
+          </div>
+        </div>
+      </header>
+
+      <div class="dashboard-content" id="tabContent">
+        </div>
+    </main>
+
+    <nav class="mobile-bottom-nav">
+      <div class="mobile-nav-item active" onclick="loadTab('home')"><span>🏠</span>Home</div>
+      <div class="mobile-nav-item" onclick="loadTab('records')"><span>📂</span>Records</div>
+      <div class="mobile-nav-item" onclick="loadTab('share')"><span>🔗</span>Share</div>
+      <div class="mobile-nav-item" onclick="loadTab('emergency')"><span>🚨</span>Emergency</div>
+      <div class="mobile-nav-item" onclick="loadTab('settings')"><span>👤</span>Profile</div>
+    </nav>
+  </div>
+
+  <div class="modal-overlay" id="appModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modalTitle">Modal Title</h3>
+        <button onclick="closeModal()" style="border:none; background:none; font-size:1.2rem; cursor:pointer;">✕</button>
+      </div>
+      <div class="modal-body" id="modalBody">
+        </div>
+      <div class="modal-footer" id="modalFooter">
+        <button class="btn btn-secondary" onclick="closeModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ==========================================
+       INITIALIZATION & APPLICATION STATE
+       ========================================== */
+    const DEFAULT_DATA = {
+      user: {
+        name: "Prabhat Bhatta",
+        healthId: "TJ-NP-2847-5912",
+        dob: "1994-06-12",
+        gender: "Male",
+        phone: "+977 9841234567",
+        email: "prabhat.bhatta@example.com",
+        bloodGroup: "O+",
+        allergies: ["Penicillin"],
+        emergencyContact: "Sita Bhatta (Spouse) - 9801234567"
+      },
+      records: [
+        { id: 101, title: "CBC & Metabolic Blood Panel", hospital: "Kathmandu Diagnostic Center", date: "2026-07-22", type: "Blood Tests", doctor: "Dr. A. Sharma", details: "Hemoglobin: 14.2 g/dL, WBC: 7,200 /µL, Platelets: 250,000 /µL. All parameters within normal limits." },
+        { id: 102, title: "Chest X-Ray PA View", hospital: "Grande International Hospital", date: "2026-01-12", type: "X-Ray", doctor: "Dr. R. Shrestha", details: "Clear lung fields bilaterally. Normal cardiac size and silhouette." },
+        { id: 103, title: "Abdominal Ultrasound", hospital: "City Clinic", date: "2025-11-04", type: "Ultrasound", doctor: "Dr. S. Karki", details: "Normal liver, gallbladder, and kidneys. No focal lesions." }
+      ],
+      prescriptions: [
+        { id: 201, medicine: "Amoxicillin", dosage: "500 mg", frequency: "3 times daily", duration: "5 days", doctor: "Dr. A. Sharma", hospital: "Grande International Hospital", date: "2026-08-15" },
+        { id: 202, medicine: "Paracetamol", dosage: "500 mg", frequency: "As needed for pain", duration: "3 days", doctor: "Dr. S. Karki", hospital: "City Clinic", date: "2026-05-10" }
+      ],
+      medications: [
+        { id: 301, name: "Amoxicillin", dose: "500 mg", freq: "8 Hours", status: "Active" },
+        { id: 302, name: "Paracetamol", dose: "500 mg", freq: "PRN (As Needed)", status: "Active" }
+      ],
+      vaccinations: [
+        { name: "COVID-19 Booster", date: "2024-03-10", dose: "Dose 3", provider: "Teku Hospital", status: "Completed" },
+        { name: "Tetanus Toxoid", date: "2023-08-15", dose: "Single", provider: "City Clinic", status: "Completed" },
+        { name: "Hepatitis B", date: "2021-05-20", dose: "Dose 3", provider: "KMC Hospital", status: "Completed" },
+        { name: "Influenza (Seasonal)", date: "2026-10-01", dose: "Annual", provider: "Pending", status: "Due Soon" }
+      ],
+      permissions: [
+        { id: 401, provider: "Grande International Hospital", scope: "Full Medical History", status: "Active", expires: "2026-09-05" },
+        { id: 402, provider: "Kathmandu Diagnostic Center", scope: "Lab Reports Only", status: "Expired", expires: "2026-08-20" }
+      ],
+      auditLog: [
+        { date: "2026-09-02 08:15", entity: "Grande International Hospital", action: "Viewed Medical History", duration: "24 Hours Grant" },
+        { date: "2026-08-28 14:30", entity: "Kathmandu Diagnostic Center", action: "Uploaded Lab Report (CBC)", duration: "Direct Entry" }
+      ]
+    };
+
+    let AppState = JSON.parse(localStorage.getItem('TJ_APP_STATE')) || DEFAULT_DATA;
+    let currentLang = 'EN';
+    let emergencyModeActive = false;
+
+    function saveState() {
+      localStorage.setItem('TJ_APP_STATE', JSON.stringify(AppState));
+    }
+
+    /* ==========================================
+       ROUTING & VIEW MANAGEMENT
+       ========================================== */
+    function navigateTo(view) {
+      document.getElementById('landingView').classList.add('hidden');
+      document.getElementById('authView').classList.add('hidden');
+      document.getElementById('dashboardView').classList.add('hidden');
+
+      if (view === 'landing') {
+        document.getElementById('landingView').classList.remove('hidden');
+      } else if (view === 'login' || view === 'register') {
+        document.getElementById('authView').classList.remove('hidden');
+        switchAuthMode(view);
+      } else if (view === 'dashboard') {
+        document.getElementById('dashboardView').classList.remove('hidden');
+        loadTab('home');
+      }
+      window.scrollTo(0,0);
+    }
+
+    function switchAuthMode(mode) {
+      if (mode === 'login') {
+        document.getElementById('loginFormContainer').classList.remove('hidden');
+        document.getElementById('registerFormContainer').classList.add('hidden');
+      } else {
+        document.getElementById('loginFormContainer').classList.add('hidden');
+        document.getElementById('registerFormContainer').classList.remove('hidden');
+      }
+    }
+
+    function handleLogin(e) {
+      e.preventDefault();
+      navigateTo('dashboard');
+    }
+
+    function handleRegister(e) {
+      e.preventDefault();
+      const name = document.getElementById('regName').value;
+      if (name) {
+        AppState.user.name = name;
+        AppState.user.healthId = "TJ-NP-" + Math.floor(1000 + Math.random() * 9000) + "-" + Math.floor(1000 + Math.random() * 9000);
+        saveState();
+      }
+      navigateTo('dashboard');
+    }
+
+    function handleLogout() {
+      navigateTo('landing');
+    }
+
+    function scrollToSection(id) {
+      document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+    }
+
+    /* ==========================================
+       DASHBOARD TAB RENDERING ENGINE
+       ========================================== */
+    function loadTab(tabName) {
+      // Highlight sidebar
+      const items = document.querySelectorAll('.menu-item');
+      items.forEach(el => el.classList.remove('active'));
+      const activeEl = Array.from(items).find(el => el.getAttribute('onclick')?.includes(tabName));
+      if (activeEl) activeEl.classList.add('active');
+
+      // Update avatar/header
+      const initials = AppState.user.name.split(' ').map(n=>n[0]).join('').substring(0,2);
+      document.getElementById('navAvatar').innerText = initials;
+      document.getElementById('navUserName').innerText = AppState.user.name;
+
+      const content = document.getElementById('tabContent');
+
+      switch (tabName) {
+        case 'home':
+          content.innerHTML = renderHomeTab();
+          break;
+        case 'records':
+          content.innerHTML = renderRecordsTab();
+          break;
+        case 'prescriptions':
+          content.innerHTML = renderPrescriptionsTab();
+          break;
+        case 'medications':
+          content.innerHTML = renderMedicationsTab();
+          break;
+        case 'vaccinations':
+          content.innerHTML = renderVaccinationsTab();
+          break;
+        case 'hospitals':
+          content.innerHTML = renderHospitalsTab();
+          break;
+        case 'emergency':
+          content.innerHTML = renderEmergencyTab();
+          break;
+        case 'share':
+          content.innerHTML = renderShareTab();
+          break;
+        case 'permissions':
+          content.innerHTML = renderPermissionsTab();
+          break;
+        case 'family':
+          content.innerHTML = renderFamilyTab();
+          break;
+        case 'ai':
+          content.innerHTML = renderAITab();
+          break;
+        case 'settings':
+          content.innerHTML = renderSettingsTab();
+          break;
+        default:
+          content.innerHTML = renderHomeTab();
+      }
+    }
+
+    /* ==========================================
+       TAB RENDER FUNCTIONS
+       ========================================== */
+    function renderHomeTab() {
+      return `
+        <div class="health-id-banner">
+          <div>
+            <div style="font-size:0.9rem; opacity:0.9;">Good morning, ${AppState.user.name}</div>
+            <div class="health-id-code">${AppState.user.healthId}</div>
+            <div style="margin-top:6px; font-size:0.8rem; opacity:0.9;">
+              Status: <span class="badge badge-active" style="color:white; background:rgba(255,255,255,0.25);">✓ Active Digital ID</span>
+            </div>
+          </div>
+          <div>
+            <button class="btn btn-secondary btn-sm" onclick="showQRCodeModal()">📱 Show QR Code</button>
+          </div>
+        </div>
+
+        <div class="quick-actions-grid">
+          <div class="quick-action-btn" onclick="loadTab('records')"><span class="quick-action-icon">📂</span>My Health</div>
+          <div class="quick-action-btn" onclick="triggerUploadModal()"><span class="quick-action-icon">📤</span>Upload Record</div>
+          <div class="quick-action-btn" onclick="loadTab('share')"><span class="quick-action-icon">🔗</span>Share Records</div>
+          <div class="quick-action-btn" onclick="loadTab('emergency')"><span class="quick-action-icon">🚨</span>Emergency Card</div>
+          <div class="quick-action-btn" onclick="loadTab('prescriptions')"><span class="quick-action-icon">💊</span>Prescriptions</div>
+        </div>
+
+        <div class="summary-metrics-grid">
+          <div class="metric-card">
+            <div style="color:var(--text-muted); font-size:0.8rem; font-weight:700;">BLOOD GROUP</div>
+            <div class="metric-val">${AppState.user.bloodGroup}</div>
+          </div>
+          <div class="metric-card">
+            <div style="color:var(--text-muted); font-size:0.8rem; font-weight:700;">ALLERGIES</div>
+            <div class="metric-val" style="color:var(--accent-red); font-size:1.2rem; margin-top:12px;">${AppState.user.allergies.join(', ')}</div>
+          </div>
+          <div class="metric-card">
+            <div style="color:var(--text-muted); font-size:0.8rem; font-weight:700;">ACTIVE MEDICATIONS</div>
+            <div class="metric-val">${AppState.medications.length}</div>
+          </div>
+          <div class="metric-card">
+            <div style="color:var(--text-muted); font-size:0.8rem; font-weight:700;">MEDICAL RECORDS</div>
+            <div class="metric-val">${AppState.records.length}</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 style="margin-bottom:12px;">Medical Record Timeline</h3>
+          <div class="timeline">
+            ${AppState.records.map(r => `
+              <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                  <div style="display:flex; justify-content:space-between; font-weight:700;">
+                    <span>${r.title}</span>
+                    <span style="font-size:0.8rem; color:var(--text-muted);">${r.date}</span>
+                  </div>
+                  <div style="font-size:0.85rem; color:var(--text-muted); margin-top:2px;">${r.hospital} • ${r.doctor}</div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderRecordsTab() {
+      return `
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+          <h2>Medical Record Library</h2>
+          <button class="btn btn-primary btn-sm" onclick="triggerUploadModal()">+ Upload New Record</button>
+        </div>
+
+        <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap:16px;">
+          ${AppState.records.map(r => `
+            <div class="card">
+              <span class="badge badge-info">${r.type}</span>
+              <h4 style="margin-top:10px;">${r.title}</h4>
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-top:4px;">${r.hospital}</p>
+              <p style="font-size:0.8rem; color:var(--text-muted);">${r.date}</p>
+              <div style="margin-top:16px; display:flex; gap:8px;">
+                <button class="btn btn-secondary btn-sm" onclick="viewRecordDetails(${r.id})">View</button>
+                <button class="btn btn-secondary btn-sm" onclick="loadTab('share')">Share</button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    function renderPrescriptionsTab() {
+      return `
+        <h2 style="margin-bottom:20px;">Prescriptions</h2>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Medicine</th>
+              <th>Dosage</th>
+              <th>Frequency</th>
+              <th>Duration</th>
+              <th>Prescribed By</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${AppState.prescriptions.map(p => `
+              <tr>
+                <td><strong>${p.medicine}</strong></td>
+                <td>${p.dosage}</td>
+                <td>${p.frequency}</td>
+                <td>${p.duration}</td>
+                <td>${p.doctor} (${p.hospital})</td>
+                <td>${p.date}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+    }
+
+    function renderMedicationsTab() {
+      return `
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+          <h2>Active Medications & Reminders</h2>
+          <button class="btn btn-primary btn-sm" onclick="triggerAddMedicationModal()">+ Add Medication</button>
+        </div>
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:16px;">
+          ${AppState.medications.map(m => `
+            <div class="card">
+              <div style="display:flex; justify-content:space-between;">
+                <h4>${m.name}</h4>
+                <span class="badge badge-active">${m.status}</span>
+              </div>
+              <p style="margin-top:8px; font-size:0.9rem;">Dose: <strong>${m.dose}</strong></p>
+              <p style="font-size:0.85rem; color:var(--text-muted);">Frequency: ${m.freq}</p>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    function renderVaccinationsTab() {
+      return `
+        <h2 style="margin-bottom:20px;">Vaccination Record History</h2>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Vaccine</th>
+              <th>Dose / Stage</th>
+              <th>Provider</th>
+              <th>Date</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${AppState.vaccinations.map(v => `
+              <tr>
+                <td><strong>${v.name}</strong></td>
+                <td>${v.dose}</td>
+                <td>${v.provider}</td>
+                <td>${v.date}</td>
+                <td><span class="badge ${v.status === 'Completed' ? 'badge-active' : 'badge-warning'}">${v.status}</span></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+    }
+
+    function renderHospitalsTab() {
+      const providers = [
+        { name: "Grande International Hospital", loc: "Dhapasi, Kathmandu", status: "Connected" },
+        { name: "Kathmandu Diagnostic Center", loc: "Maharajgunj, Kathmandu", status: "Connected" },
+        { name: "Norvic International Hospital", loc: "Thapathali, Kathmandu", status: "Not Connected" },
+        { name: "B&B Hospital", loc: "Gwarko, Lalitpur", status: "Not Connected" }
+      ];
+
+      return `
+        <h2 style="margin-bottom:8px;">Connected Healthcare Providers</h2>
+        <p style="color:var(--text-muted); margin-bottom:20px; font-size:0.9rem;">Simulated connection status with registered Nepali healthcare hubs.</p>
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:16px;">
+          ${providers.map(p => `
+            <div class="card">
+              <h4>${p.name}</h4>
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-top:4px;">${p.loc}</p>
+              <div style="margin-top:16px; display:flex; justify-content:space-between; align-items:center;">
+                <span class="badge ${p.status === 'Connected' ? 'badge-active' : 'badge-warning'}">${p.status}</span>
+                <button class="btn btn-secondary btn-sm" onclick="alert('Demo connection request initiated for ${p.name}.')">
+                  ${p.status === 'Connected' ? 'Manage' : 'Connect Provider'}
+                </button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    function renderEmergencyTab() {
+      return `
+        <div class="${emergencyModeActive ? 'emergency-card-view' : 'card'}" style="max-width:600px; margin:0 auto; padding:28px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:12px; margin-bottom:16px;">
+            <h3 style="color:${emergencyModeActive ? '#ffffff' : 'var(--accent-red)'}">🚨 EMERGENCY HEALTH PROFILE</h3>
+            <span class="badge badge-danger">High Priority</span>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; font-size:0.95rem;">
+            <div>
+              <label style="font-size:0.75rem; opacity:0.8;">FULL NAME</label>
+              <div style="font-weight:700;">${AppState.user.name}</div>
+            </div>
+            <div>
+              <label style="font-size:0.75rem; opacity:0.8;">HEALTH ID</label>
+              <div style="font-weight:700;">${AppState.user.healthId}</div>
+            </div>
+            <div>
+              <label style="font-size:0.75rem; opacity:0.8;">BLOOD TYPE</label>
+              <div style="font-weight:800; font-size:1.3rem; color:${emergencyModeActive ? '#fef08a' : 'var(--accent-red)'}">${AppState.user.bloodGroup}</div>
+            </div>
+            <div>
+              <label style="font-size:0.75rem; opacity:0.8;">CRITICAL ALLERGY</label>
+              <div style="font-weight:700;">${AppState.user.allergies.join(', ')}</div>
+            </div>
+          </div>
+
+          <div style="margin-top:16px; border-top:1px dashed var(--border-color); padding-top:12px;">
+            <label style="font-size:0.75rem; opacity:0.8;">EMERGENCY CONTACT</label>
+            <div style="font-weight:700;">${AppState.user.emergencyContact}</div>
+          </div>
+
+          <div class="qr-placeholder"></div>
+          
+          <div style="margin-top:20px; text-align:center;">
+            <button class="btn ${emergencyModeActive ? 'btn-secondary' : 'btn-danger'}" onclick="toggleEmergencyMode()">
+              ${emergencyModeActive ? 'Exit Emergency Display Mode' : 'Activate Fullscreen Emergency Mode'}
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderShareTab() {
+      return `
+        <div class="card" style="max-width:600px; margin:0 auto;">
+          <h2>Share Medical Records</h2>
+          <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:20px;">Grant temporary, read-only access to a doctor or hospital.</p>
+          
+          <div class="form-group">
+            <label>Select Information Scope</label>
+            <select class="form-control" id="shareScope">
+              <option>Full Medical Records & History</option>
+              <option>Lab Reports Only</option>
+              <option>Prescriptions & Active Medications Only</option>
+              <option>Emergency Profile Only</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Access Duration</label>
+            <select class="form-control" id="shareDuration">
+              <option>1 Hour</option>
+              <option selected>24 Hours</option>
+              <option>7 Days</option>
+            </select>
+          </div>
+
+          <button class="btn btn-primary" style="width:100%; margin-top:12px;" onclick="generateAccessCode()">Generate Secure Access Token</button>
+
+          <div id="shareResult" class="hidden" style="margin-top:24px; text-align:center; padding:16px; background:var(--bg-main); border-radius:var(--radius-sm);">
+            <div style="font-size:0.8rem; color:var(--text-muted);">TEMPORARY ACCESS CODE</div>
+            <div style="font-size:1.8rem; font-weight:800; letter-spacing:3px; color:var(--primary-dark);" id="accessCodeVal">TJ-ACCESS-XXXX</div>
+            <div class="qr-placeholder"></div>
+            <p style="font-size:0.8rem; color:var(--accent-amber); font-weight:600;">⌛ Access automatically expires in <span id="durText">24 Hours</span>.</p>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderPermissionsTab() {
+      return `
+        <h2 style="margin-bottom:8px;">Who Can Access My Health Information?</h2>
+        <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:20px;">Active permissions granted to healthcare institutions.</p>
+        
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Healthcare Provider</th>
+              <th>Access Scope</th>
+              <th>Status</th>
+              <th>Expires</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${AppState.permissions.map(p => `
+              <tr>
+                <td><strong>${p.provider}</strong></td>
+                <td>${p.scope}</td>
+                <td><span class="badge ${p.status === 'Active' ? 'badge-active' : 'badge-danger'}">${p.status}</span></td>
+                <td>${p.expires}</td>
+                <td>
+                  ${p.status === 'Active' ? `<button class="btn btn-danger btn-sm" onclick="revokeAccess(${p.id})">Revoke Access</button>` : '<span style="color:var(--text-muted); font-size:0.8rem;">Expired</span>'}
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+    }
+
+    function renderFamilyTab() {
+      return `
+        <h2 style="margin-bottom:8px;">Family Health Profiles</h2>
+        <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:20px;">Manage linked dependent health records.</p>
+        
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:16px;">
+          <div class="card">
+            <span class="badge badge-info">Child</span>
+            <h3 style="margin-top:8px;">Aarushi Bhatta</h3>
+            <p style="font-size:0.85rem; color:var(--text-muted);">Health ID: TJ-NP-9912-3341</p>
+            <div style="margin-top:16px;">
+              <button class="btn btn-secondary btn-sm" onclick="alert('Switching profile to Aarushi Bhatta (Demo)')">View Profile</button>
+            </div>
+          </div>
+          <div class="card" style="border:2px dashed var(--border-color); display:flex; align-items:center; justify-content:center; text-align:center;">
+            <div>
+              <p style="font-weight:600; color:var(--text-muted);">+ Add Family Member</p>
+              <button class="btn btn-secondary btn-sm" style="margin-top:8px;" onclick="alert('Family linking feature demo')">Link Profile</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderAITab() {
+      return `
+        <div class="card" style="max-width:700px; margin:0 auto;">
+          <h2>🤖 AI Health Record Summarizer</h2>
+          <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:16px;">Automated natural-language view of your aggregated medical records.</p>
+          
+          <div style="background:var(--primary-light); padding:16px; border-radius:var(--radius-sm); border-left:4px solid var(--primary);">
+            <h4 style="color:var(--primary-dark);">Automated Health Overview</h4>
+            <ul style="margin-top:8px; margin-left:20px; font-size:0.9rem; color:var(--text-main);">
+              <li>Your record archive contains <strong>${AppState.records.length} diagnostic reports</strong>, <strong>${AppState.prescriptions.length} prescriptions</strong>, and <strong>${AppState.vaccinations.filter(v=>v.status==='Completed').length} completed vaccinations</strong>.</li>
+              <li>Your most recent diagnostic checkup was <strong>${AppState.records[0].title}</strong> on <strong>${AppState.records[0].date}</strong>. All blood parameters were marked within safe limits.</li>
+              <li>Safety Flag: Recorded allergy to <strong>Penicillin</strong>. Ensure prescribing physicians are notified prior to anti-infective therapy.</li>
+            </ul>
+          </div>
+          
+          <p style="font-size:0.75rem; color:var(--text-muted); margin-top:16px;">⚠️ Note: AI summaries are strictly designed for record organization and do not constitute clinical medical advice or diagnosis.</p>
+        </div>
+      `;
+    }
+
+    function renderSettingsTab() {
+      return `
+        <div class="card" style="max-width:600px; margin:0 auto;">
+          <h2>Profile & Platform Settings</h2>
+          <div style="margin-top:16px;" class="form-group">
+            <label>Full Name</label>
+            <input type="text" class="form-control" value="${AppState.user.name}" readonly />
+          </div>
+          <div class="form-group">
+            <label>Health ID</label>
+            <input type="text" class="form-control" value="${AppState.user.healthId}" readonly />
+          </div>
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input type="text" class="form-control" value="${AppState.user.phone}" />
+          </div>
+          <div class="form-group">
+            <label>Emergency Contact</label>
+            <input type="text" class="form-control" value="${AppState.user.emergencyContact}" />
+          </div>
+          <button class="btn btn-primary" onclick="alert('Settings saved successfully!')">Save Changes</button>
+        </div>
+      `;
+    }
+
+    /* ==========================================
+       INTERACTIVE MODALS & ACTIONS
+       ========================================== */
+    function showModal(title, bodyHtml, footerHtml) {
+      document.getElementById('modalTitle').innerText = title;
+      document.getElementById('modalBody').innerHTML = bodyHtml;
+      if (footerHtml) document.getElementById('modalFooter').innerHTML = footerHtml;
+      document.getElementById('appModal').classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('appModal').classList.remove('active');
+    }
+
+    function showQRCodeModal() {
+      showModal(
+        "Digital Health ID QR",
+        `<div style="text-align:center;">
+          <p style="font-size:0.85rem; color:var(--text-muted);">Scan at connected hospitals to open your identity.</p>
+          <div class="qr-placeholder"></div>
+          <div style="font-family:monospace; font-weight:700; font-size:1.1rem;">${AppState.user.healthId}</div>
+          <p style="font-size:0.75rem; color:var(--accent-amber); margin-top:12px;">⚠️ Prototype visualization code.</p>
+        </div>`
+      );
+    }
+
+    function triggerUploadModal() {
+      showModal(
+        "Upload Medical Document",
+        `<form onsubmit="handleUploadSubmit(event)">
+          <div class="form-group">
+            <label>Document Title</label>
+            <input type="text" class="form-control" id="upTitle" placeholder="e.g. Lipid Profile Test" required />
+          </div>
+          <div class="form-group">
+            <label>Hospital / Diagnostic Lab</label>
+            <input type="text" class="form-control" id="upHospital" placeholder="e.g. Grande Hospital" required />
+          </div>
+          <div class="form-group">
+            <label>Category</label>
+            <select class="form-control" id="upType">
+              <option>Blood Tests</option>
+              <option>X-Ray</option>
+              <option>Ultrasound</option>
+              <option>Prescription</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Select File (Demo Visual)</label>
+            <input type="file" class="form-control" required />
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;">Upload Record</button>
+        </form>`
+      );
+    }
+
+    function handleUploadSubmit(e) {
+      e.preventDefault();
+      const title = document.getElementById('upTitle').value;
+      const hospital = document.getElementById('upHospital').value;
+      const type = document.getElementById('upType').value;
+
+      AppState.records.unshift({
+        id: Date.now(),
+        title: title,
+        hospital: hospital,
+        date: new Date().toISOString().split('T')[0],
+        type: type,
+        doctor: "Self Uploaded",
+        details: "User uploaded digital medical record."
+      });
+
+      AppState.auditLog.unshift({
+        date: new Date().toLocaleString(),
+        entity: "User (Self)",
+        action: `Uploaded ${title}`,
+        duration: "Permanent"
+      });
+
+      saveState();
+      closeModal();
+      loadTab('records');
+    }
+
+    function viewRecordDetails(id) {
+      const rec = AppState.records.find(r => r.id === id);
+      if (!rec) return;
+      showModal(
+        rec.title,
+        `<div>
+          <p><strong>Provider:</strong> ${rec.hospital}</p>
+          <p><strong>Date:</strong> ${rec.date}</p>
+          <p><strong>Category:</strong> ${rec.type}</p>
+          <hr style="margin:12px 0; border:0; border-top:1px solid var(--border-color);" />
+          <p><strong>Clinical Notes / Results:</strong></p>
+          <p style="font-size:0.9rem; color:var(--text-muted); margin-top:4px;">${rec.details}</p>
+          <p style="font-size:0.75rem; color:var(--accent-amber); margin-top:16px;">Demo information only. Does not provide medical advice.</p>
+        </div>`
+      );
+    }
+
+    function generateAccessCode() {
+      const duration = document.getElementById('shareDuration').value;
+      const code = "TJ-ACCESS-" + Math.floor(100000 + Math.random() * 900000);
+      document.getElementById('accessCodeVal').innerText = code;
+      document.getElementById('durText').innerText = duration;
+      document.getElementById('shareResult').classList.remove('hidden');
+
+      AppState.auditLog.unshift({
+        date: new Date().toLocaleString(),
+        entity: "Shared Access Code",
+        action: "Generated Temporary Access Token",
+        duration: duration
+      });
+      saveState();
+    }
+
+    function revokeAccess(id) {
+      const perm = AppState.permissions.find(p => p.id === id);
+      if (perm) {
+        perm.status = "Expired";
+        saveState();
+        loadTab('permissions');
+      }
+    }
+
+    function toggleEmergencyMode() {
+      emergencyModeActive = !emergencyModeActive;
+      if (emergencyModeActive) {
+        document.body.classList.add('emergency-active');
+      } else {
+        document.body.classList.remove('emergency-active');
+      }
+      loadTab('emergency');
+    }
+
+    function toggleLanguage() {
+      currentLang = currentLang === 'EN' ? 'NE' : 'EN';
+      document.getElementById('langToggleBtn').innerText = currentLang === 'EN' ? 'NEP' : 'ENG';
+      // Simple UI language state simulation toggle
+    }
+
+    function handleGlobalSearch(query) {
+      if (!query) return;
+      console.log("Searching for:", query);
+    }
+  </script>
+</body>
+</html>
