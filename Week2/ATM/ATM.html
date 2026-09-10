@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ATM</title>
+</head>
+
+<body>
+
+    <h2>ATM System</h2>
+
+    <label>Enter PIN:</label>
+    <input type="password" id="pin">
+
+    <br><br>
+
+    <label>Amount:</label>
+    <input type="number" id="amount">
+
+    <br><br>
+
+    <button onclick="atm('balance')">Check Balance</button>
+    <button onclick="atm('withdraw')">Withdraw</button>
+    <button onclick="atm('deposit')">Deposit</button>
+
+    <h3 id="result"></h3>
+
+    <script src="ATM.js"></script>
+
+</body>
+</html>
