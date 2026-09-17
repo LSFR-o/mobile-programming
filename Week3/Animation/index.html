@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>jQuery Box Animation</title>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 25px;
+            font-family: Arial, sans-serif;
+            background: #eef2f7;
+            text-align: center;
+        }
+
+        h1 {
+            color: #263238;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #607d8b;
+        }
+
+        #animation-area {
+            position: relative;
+            width: 90%;
+            height: 500px;
+            margin: 25px auto;
+            background: white;
+            border: 3px solid #cfd8dc;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        #box {
+            width: 80px;
+            height: 80px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: #e74c3c;
+            border-radius: 12px;
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        #start-animation {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            background-color: #3498db;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #start-animation:hover {
+            background-color: #217dbb;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>jQuery Box Animation</h1>
+
+    <p>
+        Click the button to move the box around the four corners.
+    </p>
+
+    <div id="animation-area">
+        <div id="box"></div>
+    </div>
+
+    <button id="start-animation">
+        Start Animation
+    </button>
+
+    <script src="animation.js"></script>
+
+</body>
+</html>
