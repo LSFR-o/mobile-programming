@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Firebase Users</title>
+</head>
+<body>
+
+    <h1>Firebase User Data</h1>
+
+    <button onclick="writeUserData(1, 'Prabhat', 'Bhatta', 21, 175, 70, 'Male', 'Kathmandu', 'prabhat@gmail.com', '9800000001', 'Student')">Add User 1</button>
+
+    <button onclick="writeUserData(2, 'Ram', 'Sharma', 22, 170, 68, 'Male', 'Pokhara', 'ram@gmail.com', '9800000002', 'Student')">Add User 2</button>
+
+    <button onclick="writeUserData(3, 'Sita', 'Thapa', 20, 160, 55, 'Female', 'Lalitpur', 'sita@gmail.com', '9800000003', 'Designer')">Add User 3</button>
+
+    <button onclick="writeUserData(4, 'Aayush', 'Gurung', 23, 178, 75, 'Male', 'Bhaktapur', 'aayush@gmail.com', '9800000004', 'Developer')">Add User 4</button>
+
+    <button onclick="writeUserData(5, 'Anisha', 'Karki', 21, 165, 58, 'Female', 'Chitwan', 'anisha@gmail.com', '9800000005', 'Teacher')">Add User 5</button>
+
+    <br><br>
+
+    <input id="userId" type="number" placeholder="Enter User ID">
+    <button onclick="readUser()">Read User</button>
+
+    <script type="module" src="script.js"></script>
+
+</body>
+</html>

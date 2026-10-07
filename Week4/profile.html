@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login Profile Card</title>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #eef2f7;
+            text-align: center;
+            padding: 50px;
+        }
+
+        .card {
+            width: 320px;
+            margin: auto;
+            padding: 25px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #217dbb;
+        }
+
+        #profile {
+            display: none;
+        }
+
+        #profile img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        #message {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>My Profile</h1>
+
+    <!-- Login Form -->
+    <div class="card" id="login">
+
+        <h2>Login</h2>
+
+        <input type="text" id="username"
+               placeholder="Enter Username">
+
+        <input type="password" id="password"
+               placeholder="Enter Password">
+
+        <br>
+
+        <button id="login-btn">Login</button>
+
+        <p id="message"></p>
+
+    </div>
+
+
+    <!-- Profile Card -->
+    <div class="card" id="profile">
+
+        <img src="myphoto.jpg.jpg" alt="Profile Photo">
+
+        <h2>Prabhat Bhatta</h2>
+
+        <p><b>Address:</b> Kathmandu, Nepal</p>
+
+        <p><b>Email:</b> prabhatbhatta.27@gmail.com</p>
+
+        <p><b>Date of Birth:</b> 2005-09-12</p>
+
+        <button id="logout-btn">Logout</button>
+
+    </div>
+
+
+    <script src="profile.js"></script>
+
+</body>
+</html>
