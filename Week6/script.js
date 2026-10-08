@@ -1,4 +1,3 @@
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
 
 import {
@@ -7,7 +6,6 @@ import {
     set,
     get
 } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-database.js";
-
 
 const firebaseConfig = {
     apiKey: "AIzaSyDWWQ6WARUVH7TfpNRvfS-DqtW52W4hNhK",
@@ -19,48 +17,38 @@ const firebaseConfig = {
     measurementId: "G-03L3RBVSWD"
 };
 
-
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
+function writeUserData(userId, firstname, lastname, age, height, weight, gender, city, email, phone, occupation) {
 
-// Add users
-function addUsers() {
+    set(ref(db, "users/" + userId), {
+        fname: firstname,
+        lname: lastname,
+        age: age,
+        height: height,
+        weight: weight,
+        gender: gender,
+        city: city,
+        email: email,
+        phone: phone,
+        occupation: occupation
+    });
 
-    for (let i = 1; i <= 5; i++) {
-
-        set(ref(db, "users/" + i), {
-            fname: document.getElementById("fname" + i).value,
-            lname: document.getElementById("lname" + i).value,
-            age: document.getElementById("age" + i).value,
-            height: document.getElementById("height" + i).value,
-            weight: document.getElementById("weight" + i).value,
-            gender: document.getElementById("gender" + i).value,
-            city: document.getElementById("city" + i).value,
-            email: document.getElementById("email" + i).value,
-            phone: document.getElementById("phone" + i).value,
-            occupation: document.getElementById("occupation" + i).value
-        });
-
-    }
-
-    console.log("5 users added");
+    console.log("User " + userId + " added");
 }
 
-window.addUsers = addUsers;
+window.writeUserData = writeUserData;
 
 
-// Read one user
 function readUser() {
 
     let userId = document.getElementById("userId").value;
 
-    const userRef = ref(db, "users/" + userId);
+    get(ref(db, "users/" + userId)).then((snapshot) => {
 
-    get(userRef).then((data) => {
-
-        if (data.exists()) {
-            console.log("User " + userId + ":", data.val());
+        if (snapshot.exists()) {
+            console.log("User " + userId + ":", snapshot.val());
         } else {
             console.log("User not found");
         }
